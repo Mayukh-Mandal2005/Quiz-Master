@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Quiz Scores</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .navbar .form-control {
+            width: 200px; /* Set a fixed width */
+            max-width: 100%; /* Ensure responsiveness */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <div id="canvas" class="p-2">
+            <!--Navbar-->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Welcome {{full_name}}</a>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" aria-current="page" href="/user_dashboard">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/scores">Scores</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/user_summary">Summary</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">Log Out</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div id="content" class="border border-dark rounded p-4" style="margin-top:100px;">
+            <h3 class="headings">Quiz Scores</h3>
+                <div class="table table-responsive">
+                    <table class="table table-bordered text-center">
+                        <thead class="border border-primary text-primary">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Quiz Name</th>
+                                <th scope="col">No. of Questions</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Score</th>
+                            </tr>
+                        </thead>
+                        <tbody class="border border-dark">
+                            {% if scores %}
+                                {% for score in scores %}
+                                    <tr>
+                                        <th scope="row">{{score.quiz_id}}</th>
+                                        <td>{% for quiz in quizzes %}
+                                            {% if quiz.id == score.quiz_id %}
+                                                {{quiz.name}}
+                                            {% endif %}
+                                        {% endfor %}</td>
+                                        <td>{{score.questions}}</td>
+                                        <td>{{score.timestamp}}</td>
+                                        <td>{{score.score}}/{{score.questions}}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                    <tr>
+                                        <td colspan="5">No scores available</td>
+                                    </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

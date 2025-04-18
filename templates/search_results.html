@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .navbar .form-control {
+            width: 200px;
+            max-width: 100%;
+            /* Ensure responsiveness */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main">
+        <div id="canvas" class="p-2" style="width: 70%;">
+            <!--Navbar-->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Welcome {{full_name}}</a>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/admin_dashboard">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/quiz_management">Quiz</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/users">Users</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin_summary">Summary</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">Log Out</a>
+                            </li>
+                        </ul>
+                        <form class="d-flex ms-auto" action="/search" method="GET">
+                            <input class="form-control search-input" type="search" placeholder="Search"
+                                aria-label="Search" name="query" value="{{query}}">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Search Results -->
+             {% if query %}
+                <h3 class="mt-4 text-center">Search Results for "{{query}}"</h3>
+                {% if users %}
+                    <h4 class="text-center">Users</h4>
+                    <div class="table-responsive mt-4">
+                        <table class="table table-bordered text-center">
+                            <thead class="border border-primary text-primary">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Full Name</th>
+                                    <th>Qualification</th>
+                                    <th>Date of Birth</th>
+                                    <th>Email(Username)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="border border-dark">
+                                {% for user in users %}
+                                    <tr>
+                                        <td>{{ user.id }}</td>
+                                        <td>{{ user.full_name }}</td>
+                                        <td>{{ user.qualification }}</td>
+                                        <td>{{ user.dob }}</td>
+                                        <td>{{ user.username }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+                {% if subjects %}
+                    <h4 class="text-center">Subjects</h4>
+                    <div class="table-responsive mt-4">
+                        <table class="table table-bordered text-center">
+                            <thead class="border border-primary text-primary">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Chapters</th>
+                                </tr>
+                            </thead>
+                            <tbody class="border border-dark">
+                                {% for subject in subjects %}
+                                    <tr>
+                                        <td>{{subject.id}}</td>
+                                        <td>{{subject.name}}</td>
+                                        <td>{{subject.chapters | length}}</td>
+                                    </tr>
+                                {% endfor %}
+                {% endif %}
+
+                {% if quizzes %}
+                    <h4 class="text-center">Quizzes</h4>
+                    <div class="table-responsive mt-4">
+                        <table class="table table-bordered text-center">
+                            <thead class="border border-primary text-primary">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Quiz Date</th>
+                                    <th>Duration(mm)</th>
+                                    <th>Questions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="border border-dark">
+                                {% for quiz in quizzes %}
+                                    <tr>
+                                        <td>{{ quiz.id }}</td>
+                                        <td>{{ quiz.name }}</td>
+                                        <td>{{ quiz.quizdate }}</td>
+                                        <td>{{ quiz.duration }}</td>
+                                        <td>{{ quiz.questions | length }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+
+                {% if not users and not subjects and not quizzes %}
+                    <h3 class="mt-5 text-center">No results found.</h3>
+                    <div class="justify-content-center text-center mt-4">
+                        <a href="/admin_dashboard" class="btn btn-primary">Back to Dashboard</a>
+                    </div>
+                {% endif %}
+
+             {% endif %}
